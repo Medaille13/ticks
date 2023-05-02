@@ -77,9 +77,11 @@ class UsersController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $user_id)
     {
-        //
+        $user = User::find($user_id);
+        $input = $request->all();
+        $user = fill($input)->save();
     }
 
     /**
