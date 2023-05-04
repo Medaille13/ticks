@@ -20,6 +20,7 @@ class UsersController extends Controller
     public function index()
     {
         $users = User::all();
+        dump(session()->all());
         return view('admin.crud')->with('users', $users);
     }
 
@@ -43,7 +44,8 @@ class UsersController extends Controller
     {
         $input = $request->all();
         User::create($input);
-        return redirect('home')->with('success', 'Utilisateur rajouté !');      
+        return redirect('home')->with('success', 'Utilisateur rajouté !');    
+        //le message n'apparait pas de validation (notification?)  
     }
 
     /**
@@ -54,8 +56,8 @@ class UsersController extends Controller
      */
     public function show(User $users)
     {
-        $users = User::find($users);
-        return view('admin/show')->with('users', $users); 
+        //$users = User::find($users);
+        //return view('admin/show')->with('users', $users); 
     }
 
     /**
@@ -64,10 +66,10 @@ class UsersController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($user_id)
     {
-        $user = User::find($user);
-        return view('admin/edit');
+        $user = User::find($user_id);
+        return view('admin/edit',compact('user'));
     }
 
     /**
@@ -80,8 +82,11 @@ class UsersController extends Controller
     public function update(Request $request, $user_id)
     {
         $user = User::find($user_id);
-        $input = $request->all();
-        $user = fill($input)->save();
+        ($user->name = $request->name);
+        ($user->email = $request->email);
+        $user->save();        
+        return redirect()->route('crud.index');    
+        //dd($user->toArray());
     }
 
     /**

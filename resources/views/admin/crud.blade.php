@@ -42,18 +42,17 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <p>Son nom : {{$user->name}}</p>
-                                                        <p>Inscrit depuis le : {{$user->email_verified_at}}</p>
+                                                        <p>Inscrit depuis le : {{$user->created_at->translatedFormat('d/m/Y H:i:s' )}}</p>
                                                         <p>Son email : {{$user->email}}</p>
-                                                        <p>Son mot de passe : {{$user->password}}</p>
                                                         <p>Son rôle : {{$user->role}}</p>
                                                     </div>                                                    
                                                 </div>
                                             </div>
                                         </div>            
                                         
-                                        <a href="{{ url('admin/edit.' , [$user->id])}}" title="Edition de l'utilisateur"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
+                                        <a href="{{ route('crud.edit' , [$user->id])}}" title="Edition de l'utilisateur"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
                                         
-                                        <form method="POST" action="{{ url('/admin/delete' , [$user->id])}}" accept-charset="UTF-8" style="display:inline">
+                                        <form method="POST" action="{{ route('crud.destroy' , [$user->id])}}" accept-charset="UTF-8" style="display:inline">
                                             @method('DELETE')
                                             {{ csrf_field() }}
                                             <button type="button" class="btn btn-danger btn-sm" title="Supprimer l'utilisateur" data-target="#deleteModal" data-toggle="modal"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>

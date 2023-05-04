@@ -45,9 +45,9 @@ Route::view('/admin/create', 'admin.create')->middleware('auth');
 Route::middleware('auth')->group(function () {
 Route::resource('/users', UsersController::class);
 Route::resource('/admin/crud', UsersController::class);
-Route::resource('/admin/show', UsersController::class);
-Route::resource('/admin/edit', UsersController::class);
-Route::resource('/admin/delete', UsersController::class);
+//Route::resource('/admin/show', UsersController::class);
+//Route::resource('/admin/edit', UsersController::class);
+//Route::resource('/admin/delete', UsersController::class);
 });
 
 
