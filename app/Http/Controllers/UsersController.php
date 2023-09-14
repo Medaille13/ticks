@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Arr;
 
 class UsersController extends Controller
 {
@@ -20,8 +24,8 @@ class UsersController extends Controller
     public function index()
     {
         $users = User::all();
-        dump(session()->all());
-        return view('admin.crud')->with('users', $users);
+        //dump(session()->all());
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -31,8 +35,10 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('admin.crud');
+        $roles = Role::all();
+        return view('admin.users.create')->with('roles', $roles);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -42,10 +48,17 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->all();
-        User::create($input);
-        return redirect('home')->with('success', 'Utilisateur rajouté !');    
-        //le message n'apparait pas de validation (notification?)  
+        
+
+        $user = new User();  // création d'une classe qui va prendre en structure toutes les colonnes obligatoire de ma table ticket
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        //dd($ticket->toArray());
+        $user->save();
+        $user->syncRoles($request->role);
+        return redirect()->route('crud.index')->with('success', 'Utilisateur rajouté !');   
+
     }
 
     /**
@@ -69,7 +82,8 @@ class UsersController extends Controller
     public function edit($user_id)
     {
         $user = User::find($user_id);
-        return view('admin/edit',compact('user'));
+        $roles = Role::all();
+        return view('admin.users.edit',compact('user','roles'));
     }
 
     /**
@@ -80,11 +94,14 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $user_id)
-    {
+    {       
         $user = User::find($user_id);
-        ($user->name = $request->name);
-        ($user->email = $request->email);
+        $user->name = $request->name;
+        $user->email = $request->email;
         $user->save();        
+
+        //$user->assignRole($request->role); va conserver si sauvegarde de l'edition tous les roles
+        $user->syncRoles($request->role); //va n'en conserver qu'un à chaque edit
         return redirect()->route('crud.index');    
         //dd($user->toArray());
     }
@@ -99,7 +116,7 @@ class UsersController extends Controller
     {
         $user= User::find($user_id);
         $user->delete();
-        return redirect('admin/crud')->with('success', 'Utilisateur supprimé!');
+        return redirect()->route('crud.index')->with('success', 'Utilisateur supprimé!');
          
     }
 }

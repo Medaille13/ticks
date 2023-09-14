@@ -5,12 +5,13 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>UTILISATEURS CRUD</h2>
+                    <h2>Utilisateurs inscrit</h2>
                 </div>
                 <div class="card-body">
-                    <a href="{{ url('admin/create') }}" class="btn btn-success btn-sm" title="Add New Student">
-                        Créer un nouvel utilisateur
+                    <a href="{{ route('crud.create') }}" class="btn btn-success btn-sm" title="Nouvel utilisateur">
+                        Créer un nouvel utilisateur 
                     </a>
+                    <div>@include('flash-message')</div>
                     <br/>
                     <br/>
                     <div class="table-responsive">
@@ -20,6 +21,7 @@
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Email</th>
+                                    <th>Role</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -29,6 +31,8 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
+                                    <td>{{ $user->getRoleNames()->implode(', ') }}</td>
+
                                     <td>
                                         <button class="btn btn-info btn-sm" title="Vue utilisateur" data-target="#infoModal" data-toggle="modal" ><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
                                         <div class="modal fade" id="infoModal">
@@ -44,7 +48,7 @@
                                                         <p>Son nom : {{$user->name}}</p>
                                                         <p>Inscrit depuis le : {{$user->created_at->translatedFormat('d/m/Y H:i:s' )}}</p>
                                                         <p>Son email : {{$user->email}}</p>
-                                                        <p>Son rôle : {{$user->role}}</p>
+                                                        <p>Son rôle : {{ $user->getRoleNames()->implode(', ') }}</p>                                                        
                                                     </div>                                                    
                                                 </div>
                                             </div>
@@ -52,12 +56,12 @@
                                         
                                         <a href="{{ route('crud.edit' , [$user->id])}}" title="Edition de l'utilisateur"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
                                         
-                                        <form method="POST" action="{{ route('crud.destroy' , [$user->id])}}" accept-charset="UTF-8" style="display:inline">
+                                        <form method="post" action="{{ route('crud.destroy' , [$user->id])}}" accept-charset="UTF-8" style="display:inline">
                                             @method('DELETE')
                                             {{ csrf_field() }}
-                                            <button type="button" class="btn btn-danger btn-sm" title="Supprimer l'utilisateur" data-target="#deleteModal" data-toggle="modal"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+                                            <button type="button" class="btn btn-danger btn-sm" title="Supprimer l'utilisateur" data-target="#deleteModal_{{$user->id}}" data-toggle="modal"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
                                             <!-- Modal -->
-                                            <div class="modal fade" id="deleteModal">
+                                            <div class="modal fade" id="deleteModal_{{$user->id}}">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">

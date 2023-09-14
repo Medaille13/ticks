@@ -6,6 +6,8 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -17,7 +19,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable;  //HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable,  HasRoles;
     
     /**
      * The attributes that are mass assignable.
@@ -29,6 +31,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
     ];
+
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -49,10 +53,15 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function roles()
-    {
-        return $this->belongsToMany('App\Models\Role');
+  public function tickets(): HasMany
+  {
+    return $this->hasMany(Ticket::class);
 
-    }
+  }
+
+  public function discution(): HasMany
+  {
+    return $this->hasMany(Discution::class);
+  }
 
 }

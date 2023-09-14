@@ -15,21 +15,17 @@ class AdminController extends Controller
     * @return \Illuminate\Http\Response
     */
     
+    public function index()
+    {         
+        dump(session()->all());
+        return view('home');
+    } 
+    
     //Liste des utilisateurs
     public function list(){
         $users=User::all();
         return view("admin.list",compact('users'));
-    }  
-    
-    //Supprimer un utilisateur
-    public function destroy($user_id)
-    {
-        $user= User::find($user_id); //raccourcis qui prend where et first /
-        $user->delete();        
-        return redirect()->route('listusers')->with('success', 'User delete.');
-    } 
-    
-    
+    }   
     
     
     public function __invoke(Request $request)

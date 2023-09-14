@@ -1,5 +1,5 @@
-<p>Hi,</p>
+<p>Bonjour {{$invite->name}}</p>
  
-<p>Someone has invited you to access their account.</p>
+<p>Vous avez reçu une invitation, de la part de Ticketing Management, veuillez suivre le lien ci-dessous pour activer votre compte</p>
  
-<a href="{{ route('accept' , '$invite->token') }}">Click here</a> to activate!
+<a href="{{ route('registeremail' , $invite->token) }}">Lien d'activation!</a>

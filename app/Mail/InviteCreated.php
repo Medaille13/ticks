@@ -13,6 +13,7 @@ use App\Models\Invite;
 class InviteCreated extends Mailable
 {
     use Queueable, SerializesModels;
+    protected $invite;
 
     /**
      * Create a new message instance.
@@ -27,7 +28,7 @@ class InviteCreated extends Mailable
     public function build()
 {
     return $this->from('you@example.com')
-                ->view('emails.invite');
+                ->view('emails.invite', ['invite'=>$this->invite]);
 }
 
     /**
